@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Name for the Deployment resource
+  name: log-generator-deployment
+  labels:
+    app: log-generator
+spec:
+  # Ensure 1 replica (one running container)
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-generator
+  template:
+    metadata:
+      # Auto-Instrumentation ON by default
+      annotations:
+        instrumentation.opentelemetry.io/inject-java: "opentelemetry-operator-system/elastic-instrumentation"
+      labels:
+        app: log-generator
+    spec:
+      # Use a nodeSelector to ensure this AMD64 image runs on an AMD64 node
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      containers:
+      - name: log-generator-container
+        # 💡 The specified container image
+        image: alessandrobrofferio273/log-traces-generator-amd64:2.0.0
+        # Replace 8080 with the actual port the application inside the container listens on
+        ports:
+        - containerPort: 8080
+        # Define resource limits/requests for stability
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "250m"

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.enterprise</groupId>
+  <artifactId>ecs-log4j-generator</artifactId>
+  <name>ecs-log4j-generator</name>
+  <version>1.0.0</version>
+  <description>ECS Logging Example with Log4j2</description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <mainClass>com.enterprise.LogGenerator</mainClass>
+                </transformer>
+              </transformers>
+              <finalName>${project.artifactId}-shaded</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <ecs-logging.version>1.5.0</ecs-logging.version>
+    <log4j.version>2.23.1</log4j.version>
+    <java.version>17</java.version>
+  </properties>
+</project>
